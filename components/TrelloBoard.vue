@@ -29,7 +29,7 @@ const columns = ref<Column[]>([
     {id:nanoid(), title: "Complete", tasks:[]},
 ]);
 
-
+const alt = useKeyModifier("Alt")
 </script>
 
 <template>
@@ -52,17 +52,19 @@ const columns = ref<Column[]>([
             </header>
             <draggable
                 v-model="column.tasks"
-                group="tasks"
+                :group="{name:'tasks',pull:alt ? 'clone': true}"
                 :animation="200"
                 item-key="id"
                 handle=".drag-handle"
             >
             <template #item="{element: task}: {element:Task}">
-                <TrelloBoardTask class="task" :task="task"/>
+                <div>
+                    <TrelloBoardTask class="task" :task="task"/>
+                </div>
             </template>
         </draggable>
             <footer>
-                <button class="text-gray-500">+ Add a Card</button>
+                <NewTask @add="column.tasks.push($event)" />
             </footer>
         </div>
         </template>
